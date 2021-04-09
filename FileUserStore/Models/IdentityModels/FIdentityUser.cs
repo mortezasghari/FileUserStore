@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FileUserStore.Models.EventModels.UserEvents;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +9,32 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Models.IdentityModels
 {
-    public class FIdentityUser<TKey> : IdentityUser<TKey> where TKey : IEquatable<TKey>
+    public sealed class FIdentityUser<TKey> : IdentityUser<TKey> where TKey : IEquatable<TKey>
     {
-
+        private readonly ConcurrentQueue<AbstractUserEventModel<TKey>> _commandQueue;
         public FIdentityUser()
         {
         }
 
         public FIdentityUser(string userName) : base(userName)
         {
+        }
+
+        public IEnumerable<AbstractUserEventModel<TKey>> SaveChange()
+        {
+            while (!_commandQueue.IsEmpty)
+            {
+                if (_commandQueue.TryDequeue(out var command))
+                {
+                    yield return command;
+
+                }
+            }
+        }
+
+        public void EventHandler(AbstractUserEventModel<TKey> _event)
+        { 
+            
         }
 
         public override TKey Id { get => base.Id; set => throw new InvalidOperationException(); }

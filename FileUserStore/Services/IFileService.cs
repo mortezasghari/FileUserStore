@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Services
 {
-    public interface IFileService
+    public interface IFileService : IObservable<AbstractEventModel>
     {
         IAsyncEnumerable<AbstractEventModel> ReadEventsAsync(string filename);
-        IAsyncEnumerable<AbstractEventModel> WriteLineAsync(string filename, IEnumerable<AbstractEventModel> input);
+        Task WriteLineAsync(string filename, IEnumerable<AbstractEventModel> input);
     }
 }
