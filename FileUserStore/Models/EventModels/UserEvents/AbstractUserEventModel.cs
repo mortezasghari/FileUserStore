@@ -2,8 +2,8 @@
 
 namespace FileUserStore.Models.EventModels.UserEvents
 {
-    public abstract record AbstractUserEventModel<TKey> : AbstractEventModel where TKey : IEquatable<TKey>
+    public abstract record AbstractUserEventModel: AbstractEventModel 
     {
-        public TKey Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

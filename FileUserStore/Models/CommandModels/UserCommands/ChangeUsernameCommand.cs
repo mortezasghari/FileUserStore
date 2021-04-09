@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Models.CommandModels.UserCommands
 {
-    public record  ChangeUsernameCommand<TKey> : AbstractUserCommandsModel<TKey> where TKey : IEquatable<TKey>
+    public record  ChangeUsernameCommand : AbstractUserCommandsModel
     {
         public string Username { get; init; }
     }

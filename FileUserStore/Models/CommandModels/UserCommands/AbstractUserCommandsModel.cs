@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Models.CommandModels.UserCommands
 {
-    public abstract record AbstractUserCommandsModel<TKey> : AbstractCommandModel where TKey : IEquatable<TKey>
+    public abstract record AbstractUserCommandsModel : AbstractCommandModel 
     {
-        public TKey UserId { get; init; }
+        public Guid UserId { get; init; }
     }
 }

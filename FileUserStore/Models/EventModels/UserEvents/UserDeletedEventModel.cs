@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUserStore.Models.CommandModels.UserCommands
+namespace FileUserStore.Models.EventModels.UserEvents
 {
-    public record CreateUserCommand: AbstractUserCommandsModel
+    public record UserDeletedEventModel : AbstractUserEventModel
     {
     }
 }

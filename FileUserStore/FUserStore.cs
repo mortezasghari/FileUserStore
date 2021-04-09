@@ -11,9 +11,14 @@ namespace FileUserStore
         where TKey : IEquatable<TKey>
     {
         private readonly IFileService _fileservice;
-        private readonly ConcurrentDictionary<TKey, FIdentityUser<TKey>> _user;
+        private readonly ConcurrentDictionary<TKey, FIdentityUser> _user;
+        private readonly IFUserStore _userStore;
 
 
+        public FUserStore(IFileService fileservice)
+        {
+            _fileservice = fileservice ?? throw new ArgumentNullException(nameof(fileservice));
+        }
 
         public void OnCompleted()
         {
@@ -29,7 +34,7 @@ namespace FileUserStore
         {
             if (value is AbstractUserEventModel auem)
             {
-
+                _userStore.HandleEvent(auem);
             }
         }
     }

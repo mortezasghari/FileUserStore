@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Models.CommandModels.UserCommands
 {
-    public record ChangeEmailAddressCommand : AbstractUserCommandsModel 
+    public record DeleteUserCommandModel : AbstractUserCommandsModel
     {
-        public string NewEmailAddress { get; init; }
     }
 }
