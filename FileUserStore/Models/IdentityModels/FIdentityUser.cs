@@ -13,11 +13,23 @@ namespace FileUserStore.Models.IdentityModels
         private readonly ConcurrentQueue<AbstractUserCommandsModel> _commandQueue;
         public FIdentityUser()
         {
-
+            base.Id = Guid.NewGuid();
+            _commandQueue = new ConcurrentQueue<AbstractUserCommandsModel>();
+            _commandQueue.Enqueue(new CreateUserCommand { UserId = base.Id });
         }
 
         public FIdentityUser(string userName) : base(userName)
         {
+            base.Id = Guid.NewGuid();
+            _commandQueue = new ConcurrentQueue<AbstractUserCommandsModel>();
+            _commandQueue.Enqueue(new CreateUserCommand { UserId = base.Id });
+            _commandQueue.Enqueue(new ChangeUsernameCommand { UserId = base.Id, Username = base.UserName });
+        }
+
+        public FIdentityUser(Guid UserId, ConcurrentQueue<AbstractUserCommandsModel> commandQueue)
+        {
+            base.Id = UserId;
+            _commandQueue = commandQueue;
         }
 
         public IEnumerable<AbstractUserCommandsModel> SaveChange()
@@ -183,9 +195,6 @@ namespace FileUserStore.Models.IdentityModels
         }
         #endregion
 
-        private void CreateNewKey()
-        {
-            
-        }
+        
     }
 }
