@@ -17,8 +17,8 @@ namespace FileUserStore.Services.Implementations
     {
         private bool disposedValue;
         private readonly IFileService _fileService;
-        private readonly ConcurrentDictionary<Guid, FIdentityUser> _user;
-        private readonly ConcurrentDictionary<string, FIdentityUser> _usernames;
+        private readonly ConcurrentDictionary<Guid, Models.IdentityModels.IdentityUser> _user;
+        private readonly ConcurrentDictionary<string, Models.IdentityModels.IdentityUser> _usernames;
         private readonly ConcurrentQueue<AbstractUserCommandsModel> _userCommands;
 
         public FUserStore(IFileService fileService)
@@ -26,7 +26,7 @@ namespace FileUserStore.Services.Implementations
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
 
-        public Task<IdentityResult> CreateAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<IdentityResult> CreateAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             if (_user.TryAdd(user.Id, null))
             {
@@ -39,13 +39,13 @@ namespace FileUserStore.Services.Implementations
             throw new UserIdNotUniqueException();
         }
 
-        public Task<IdentityResult> DeleteAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<IdentityResult> DeleteAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             _userCommands.Enqueue(new DeleteUserCommandModel { UserId = user.Id });
             return Task.FromResult(IdentityResult.Success);
         }
 
-        public Task<FIdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public Task<Models.IdentityModels.IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             if (_user.TryGetValue(Guid.Parse(userId), out var user))
             {
@@ -54,37 +54,37 @@ namespace FileUserStore.Services.Implementations
             throw new UserIdNotValidException();
         }
 
-        public Task<FIdentityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public Task<Models.IdentityModels.IdentityUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GetNormalizedUserNameAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<string> GetNormalizedUserNameAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GetUserIdAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<string> GetUserIdAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.Id.ToString());
         }
 
-        public Task<string> GetUserNameAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<string> GetUserNameAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task SetNormalizedUserNameAsync(FIdentityUser user, string normalizedName, CancellationToken cancellationToken)
+        public Task SetNormalizedUserNameAsync(Models.IdentityModels.IdentityUser user, string normalizedName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task SetUserNameAsync(FIdentityUser user, string userName, CancellationToken cancellationToken)
+        public Task SetUserNameAsync(Models.IdentityModels.IdentityUser user, string userName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> UpdateAsync(FIdentityUser user, CancellationToken cancellationToken)
+        public Task<IdentityResult> UpdateAsync(Models.IdentityModels.IdentityUser user, CancellationToken cancellationToken)
         {
             return Task.FromResult(IdentityResult.Success);
         }
@@ -143,7 +143,7 @@ namespace FileUserStore.Services.Implementations
 
         private Task UserCreatedEventHandlerAsync(UserCreatedEventModel input)
         {
-            FIdentityUser user = new(input.Id, _userCommands);
+            Models.IdentityModels.IdentityUser user = new(input.Id, _userCommands);
             if (!_user.TryAdd(input.Id, user))
             {
                 throw new UserIdNotUniqueException();

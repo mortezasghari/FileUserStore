@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileUserStore.Services
 {
-    public interface IFUserStore : IUserStore<FIdentityUser>
+    public interface IFUserStore : IUserStore<Models.IdentityModels.IdentityUser>
     {
         Task HandleEvent(AbstractUserEventModel input);
     }
